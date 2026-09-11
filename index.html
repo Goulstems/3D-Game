@@ -10,10 +10,6 @@
     <div id="game-ui">
         <h1>A Cooking Game</h1>
 
-        <p>
-            Use the arrow keys or WASD to move around.
-        </p>
-
         <!-- Span makes the score and the number on the same line -->
         <p>
             Score:
@@ -23,6 +19,15 @@
 
     <div id="game"></div>
     
+    <!-- Lets Three.js addons (like OBJLoader) find the "three" module -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js"
+        }
+    }
+    </script>
+
     <!-- Type module means that we have to go out of our browser and into the web -->
     <script type="module" src="game.js"></script>
 </body>
