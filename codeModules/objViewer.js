@@ -1,25 +1,56 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 import { OBJLoader } from "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/loaders/MTLLoader.js";
 
 /**
  * Load an .obj file and add it to the scene.
+ * If a matching .mtl file exists, its colors and textures are used.
  * Centers the model, scales it, and frames the camera if one is passed in.
  */
 export function loadObj(scene, path, camera) {
+    const lastSlash = path.lastIndexOf("/");
+    const folder = lastSlash >= 0 ? path.slice(0, lastSlash + 1) : "./";
+    const filename = lastSlash >= 0 ? path.slice(lastSlash + 1) : path;
+    const mtlFilename = filename.replace(/\.obj$/i, ".mtl");
+
+    const mtlLoader = new MTLLoader();
+    mtlLoader.setPath(folder);
+    mtlLoader.load(
+        mtlFilename,
+        (materials) => {
+            materials.preload();
+            loadObjFile(scene, folder, filename, camera, materials);
+        },
+        undefined,
+        () => {
+            // No .mtl file? Load the OBJ with a gray fallback material.
+            loadObjFile(scene, folder, filename, camera, null);
+        }
+    );
+}
+
+function loadObjFile(scene, folder, filename, camera, materials) {
     const loader = new OBJLoader();
+    loader.setPath(folder);
+
+    if (materials) {
+        loader.setMaterials(materials);
+    }
 
     loader.load(
-        path,
+        filename,
         (object) => {
-            object.traverse((child) => {
-                if (child.isMesh) {
-                    child.material = new THREE.MeshStandardMaterial({
-                        color: 0x888888,
-                        metalness: 0.35,
-                        roughness: 0.45
-                    });
-                }
-            });
+            if (!materials) {
+                object.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0x888888,
+                            metalness: 0.35,
+                            roughness: 0.45
+                        });
+                    }
+                });
+            }
 
             const box = new THREE.Box3().setFromObject(object);
             const center = box.getCenter(new THREE.Vector3());
@@ -40,7 +71,7 @@ export function loadObj(scene, path, camera) {
         },
         undefined,
         (error) => {
-            console.error("Could not load OBJ:", path, error);
+            console.error("Could not load OBJ:", folder + filename, error);
         }
     );
 }

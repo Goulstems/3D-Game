@@ -34,6 +34,8 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 // #5 Frying pan
 loadObj(scene, "./assets/Frying_Pan.obj", camera);
 
+// #6 Patty
+loadObj(scene, "./assets/rawPatty.obj", camera);
 
 //============================================================================================
 
