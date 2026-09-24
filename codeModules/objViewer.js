@@ -5,9 +5,9 @@ import { MTLLoader } from "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/j
 /**
  * Load an .obj file and add it to the scene.
  * If a matching .mtl file exists, its colors and textures are used.
- * Centers the model, scales it, and frames the camera if one is passed in.
+ * Centers and scales the model. Does not change camera state.
  */
-export function loadObj(scene, path, camera) {
+export function loadObj(scene, path) {
     const lastSlash = path.lastIndexOf("/");
     const folder = lastSlash >= 0 ? path.slice(0, lastSlash + 1) : "./";
     const filename = lastSlash >= 0 ? path.slice(lastSlash + 1) : path;
@@ -19,17 +19,17 @@ export function loadObj(scene, path, camera) {
         mtlFilename,
         (materials) => {
             materials.preload();
-            loadObjFile(scene, folder, filename, camera, materials);
+            loadObjFile(scene, folder, filename, materials);
         },
         undefined,
         () => {
             // No .mtl file? Load the OBJ with a gray fallback material.
-            loadObjFile(scene, folder, filename, camera, null);
+            loadObjFile(scene, folder, filename, null);
         }
     );
 }
 
-function loadObjFile(scene, folder, filename, camera, materials) {
+function loadObjFile(scene, folder, filename, materials) {
     const loader = new OBJLoader();
     loader.setPath(folder);
 
@@ -63,11 +63,6 @@ function loadObjFile(scene, folder, filename, camera, materials) {
             object.rotation.y = Math.PI / 2;
 
             scene.add(object);
-
-            if (camera) {
-                camera.position.set(0, 4.5, 6.5);
-                camera.lookAt(0, 0, 0);
-            }
         },
         undefined,
         (error) => {
