@@ -1,6 +1,7 @@
 //[[MODULES]]
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 import { loadObj } from "./codeModules/objViewer.js";
+import {cameraRotate} from "./codeModules/cameraRotate.js";
 
 // Web element / container for the game !
 const gameContainer = document.getElementById("game");
@@ -18,6 +19,8 @@ const camera = new THREE.PerspectiveCamera(
 );
     camera.position.set(0, 4.5, 6.5);
     camera.lookAt(0, 0, 0);
+//menuTgt
+const menuCameraTarget = new THREE.Vector3(0,0,0);
 
 // #3 Renderer
 const renderer = new THREE.WebGLRenderer();
@@ -35,16 +38,24 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 loadObj(scene, "./assets/Frying_Pan.obj");
 
 // #6 Patty (smaller, sitting in the pan so both stay visible)
-const pattyHolder = new THREE.Group();
-pattyHolder.scale.setScalar(0.28);
-pattyHolder.position.set(-.25, 0.25, -1.25);
-scene.add(pattyHolder);
-loadObj(pattyHolder, "./assets/rawPatty.obj");
+const patty = new THREE.Group();
+    patty.scale.setScalar(0.28);
+    patty.position.set(-.25, 0.25, -1.6);
+
+scene.add(patty);
+loadObj(patty, "./assets/rawPatty.obj");
 
 //============================================================================================
 
+//Create a gameTimer.
+const timer = new THREE.Timer();
+
 function animate() {
     requestAnimationFrame(animate);
+
+    timer.update();
+    cameraRotate(camera,menuCameraTarget,timer.getDelta());
+
     renderer.render(scene, camera);
 }
 
