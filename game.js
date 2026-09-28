@@ -2,6 +2,7 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 import { loadObj } from "./codeModules/objViewer.js";
 import {cameraRotate} from "./codeModules/cameraRotate.js";
+import { sceneResizer } from "./codeModules/sceneResizer.js";
 
 // Web element / container for the game !
 const gameContainer = document.getElementById("game");
@@ -24,8 +25,9 @@ const menuCameraTarget = new THREE.Vector3(0,0,0);
 
 // #3 Renderer
 const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(800, 500); // A width of 800px, and a height of 500px
     gameContainer.appendChild(renderer.domElement);
+
+sceneResizer(gameContainer, camera, renderer);
 
 // #4 Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
