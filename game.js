@@ -20,14 +20,12 @@ const camera = new THREE.PerspectiveCamera(
 );
     camera.position.set(0, 4.5, 6.5);
     camera.lookAt(0, 0, 0);
-//menuTgt
-const menuCameraTarget = new THREE.Vector3(0,0,0);
 
 // #3 Renderer
 const renderer = new THREE.WebGLRenderer();
     gameContainer.appendChild(renderer.domElement);
 
-sceneResizer(gameContainer, camera, renderer);
+sceneResizer(gameContainer, camera, renderer, scene);
 
 // #4 Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -56,7 +54,7 @@ function animate() {
     requestAnimationFrame(animate);
 
     timer.update();
-    cameraRotate(camera,menuCameraTarget,timer.getDelta());
+    cameraRotate(camera,new THREE.Vector3(0,0,0),timer.getDelta());
 
     renderer.render(scene, camera);
 }

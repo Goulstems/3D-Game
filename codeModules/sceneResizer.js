@@ -1,4 +1,4 @@
-export function sceneResizer(gameContainer, camera, renderer) {
+export function sceneResizer(gameContainer, camera, renderer, scene) {
     function resize() {
         const width = gameContainer.clientWidth;
         const height = gameContainer.clientHeight;
@@ -8,9 +8,12 @@ export function sceneResizer(gameContainer, camera, renderer) {
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
+        renderer.render(scene, camera);
     }
 
     const observer = new ResizeObserver(resize);
     observer.observe(gameContainer);
     resize();
+
+    return observer;
 }
