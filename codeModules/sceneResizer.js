@@ -1,3 +1,14 @@
+/**
+ * Keeps the camera projection and renderer size matched to the container.
+ * Resizes and renders immediately, then repeats whenever the container changes.
+ *
+ * @param {HTMLElement} gameContainer - The DOM element whose dimensions control the render size.
+ * @param {object} camera - A THREE.PerspectiveCamera.
+ * @param {object} renderer - A THREE.WebGLRenderer.
+ * @param {object} scene - The THREE.Scene to render after resizing.
+ * @returns {ResizeObserver} The observer watching gameContainer.
+ */
+
 export function sceneResizer(gameContainer, camera, renderer, scene) {
     function resize() {
         const width = gameContainer.clientWidth;

@@ -1,5 +1,5 @@
 //[[MODULES]]
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
+import * as THREE from "three";
 import { loadObj } from "./codeModules/objViewer.js";
 import {cameraRotate} from "./codeModules/cameraRotate.js";
 import { sceneResizer } from "./codeModules/sceneResizer.js";
