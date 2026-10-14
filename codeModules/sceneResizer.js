@@ -17,6 +17,8 @@ export function sceneResizer(gameContainer, camera, renderer, scene) {
         if (width === 0 || height === 0) return;
 
         camera.aspect = width / height;
+        console.log(camera.aspect);
+        // camera.aspect = height / width;
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
         renderer.render(scene, camera);
